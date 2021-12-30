@@ -11,6 +11,9 @@ ATTENDANCEFILE = "/kincone/attendance.csv"
 SCREENSHOT = "/kincone/snap/"
 TITLES = ["編集済みです"]
 
+email = None
+password = None
+
 class Browser:
     driver = None
     def __init__(self):
@@ -43,19 +46,17 @@ class Attendance:
 OPT = Options()
 OPT.add_argument('-headless')
 
-with open(CONFIGFILE, mode = "r") as f:
-    lines = f.read().splitlines()
-    for line in lines:
-        [lhs, rhs] = line.split("=")
-        if lhs == "email":
-            email = rhs
-        elif lhs == "password":
-            password = rhs
-
-# test
-#print("email: " + email)
-#print("password: " + password)
-#sys.exit()
+def load_userconf():
+    global email
+    global password
+    with open(CONFIGFILE, mode = "r") as f:
+        lines = f.read().splitlines()
+        for line in lines:
+            [lhs, rhs] = line.split("=")
+            if lhs == "email":
+                email = rhs
+            elif lhs == "password":
+                password = rhs
 
 def get_current_window_size(driver):
     print("log: call get_current_window_size(driver)")
@@ -208,3 +209,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
