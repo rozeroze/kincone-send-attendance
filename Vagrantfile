@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "~/kincone", "/kincone"
+  config.vm.synced_folder "./kincone", "/kincone"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -80,9 +80,9 @@ Vagrant.configure("2") do |config|
   # SHELL
   config.vm.provision "shell", inline: <<-SHELL
     # selenium on python3
+    sudo pip3 install selenium
     sudo pip3 install requests
     sudo pip3 install prettyprinter
-    sudo pip3 install selenium
     # install firefox
     sudo dnf install -y firefox
     sudo cd /usr/local/bin
