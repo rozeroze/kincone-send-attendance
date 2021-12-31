@@ -13,6 +13,7 @@ TITLES = ["編集済みです"]
 
 email = None
 password = None
+attendances = []
 
 class Browser:
     driver = None
@@ -33,16 +34,6 @@ class Attendance:
     def set_id(self, data_id):
         self.id = data_id
 
-# test
-#with open(ATTENDANCEFILE, mode="r") as f:
-#    reader = csv.reader(f)
-#    lines = [row for row in reader]
-#    for row in lines[1:]: # out of header
-#        atn = Attendance()
-#        atn.data_load(row)
-#        print(atn.overwrite, atn.date, atn.start_hours, atn.end_hours, atn.outing_out_hours, atn.outing_in_hours, atn.note)
-#sys.exit()
-
 OPT = Options()
 OPT.add_argument('-headless')
 
@@ -57,6 +48,13 @@ def load_userconf():
                 email = rhs
             elif lhs == "password":
                 password = rhs
+
+def load_attendances():
+    global attendances
+    with open(ATTENDANCEFILE, mode = "r") as f:
+        reader = csv.reader(f)
+        lines = [row for row in reader]
+        attendances = lines[1:] # no-header
 
 def get_current_window_size(driver):
     print("log: call get_current_window_size(driver)")
@@ -182,23 +180,20 @@ def main():
         get_current_window_size(driver)
         kincone_login(driver)
         make_snap(driver, "login.png")
-        with open(ATTENDANCEFILE, mode="r") as f:
-            print("log: attendance file open")
-            reader = csv.reader(f)
-            lines = [row for row in reader]
-            for row in lines[1:]: # no-header
-                print("log: data ->", row)
-                atn = Attendance()
-                atn.data_load(row)
-                data_id = kincone_get_data_id(driver, atn)
-                print("log: id ->", data_id)
-                atn.set_id(data_id)
-                if (atn.overwrite == "1" and kincone_is_data_exists(driver, atn)):
-                    print("log: overwrite is true and data exists, try remove")
-                    kincone_remove_attendance(driver, atn)
-                kincone_edit_attendance(driver, atn)
-                break # test: one-pattern
-        print("log: attendance file close")
+        load_attendances()
+        print("log: load attendance file")
+        for attendance in attendances:
+            print("log: data ->", attendance)
+            atn = Attendance()
+            atn.data_load(attendance)
+            data_id = kincone_get_data_id(driver, atn)
+            atn.set_id(data_id)
+            print("log: id ->", atn.id)
+            if (atn.overwrite == "1" and kincone_is_data_exists(driver, atn)):
+                print("log: overwrite is true and data exists, try remove")
+                kincone_remove_attendance(driver, atn)
+            kincone_edit_attendance(driver, atn)
+            break # test: one pattern
         kincone_logout(driver)
         make_snap(driver, "logout.png")
     except Exception as e:
