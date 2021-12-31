@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Vagrant
+.vagrant/
+
+# kincone
+kincone/.kincone.user
+kincone/snap/
+
