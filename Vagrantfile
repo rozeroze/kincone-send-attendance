@@ -85,7 +85,7 @@ Vagrant.configure("2") do |config|
     sudo pip3 install prettyprinter
     # install firefox
     sudo dnf install -y firefox
-    sudo cd /usr/local/bin
+    cd /usr/local/bin
     sudo wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
     sudo tar zxvf geckodriver-v0.24.0-linux64.tar.gz
   SHELL
