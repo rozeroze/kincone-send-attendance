@@ -21,12 +21,8 @@ def test_load_attendances():
 def test_webdriver():
     print("log: test_webdriver() called")
     try:
-        print("log: make object 'opt'")
-        opt = Options()
-        print("log: add argument to 'opt', -headless")
-        opt.add_argument('-headless')
         print("log: make webdriver with firefox")
-        driver = webdriver.Firefox(options=opt)
+        driver = webdriver.Firefox(options=k.OPT)
     except Exception as e:
         print("log: error occurred.", e)
     finally:
